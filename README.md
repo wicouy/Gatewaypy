@@ -6,21 +6,26 @@ Gatewaypy es un pequeño gestor de tokens en Python diseñado para manejar acces
 
 ```
 📦src
-┣ 📂config
-┃ ┗ 📜config.json
-┣ 📂database
-┃ ┗ 📜models.py
-┃ ┗ 📜db_utils.py
-┣ 📂auth
-┃ ┗ 📜auth_utils.py
-┃ ┗ 📜token_management.py
-┣ 📂api
-┃ ┣ 📜gateway_routes.py
-┃ ┗ 📜api_utils.py
-┣ 📂tests
-┃ ┗ 📜test_cases.py
-┣ 📜main.py
-┗ 📜Resumen.md
+ ┣ 📂blueprints
+ ┃ ┣ 📜app_routes.py
+ ┃ ┣ 📜auth_routes.py
+ ┃ ┗ 📜user_routes.py
+ ┣ 📂config
+ ┃ ┗ 📜config.json
+ ┣ 📂database
+ ┃ ┣ 📜estructurar.py
+ ┃ ┣ 📜models.py
+ ┃ ┗ 📜mydb.db
+ ┣ 📂logs
+ ┣ 📂managements
+ ┃ ┣ 📜app_management.py
+ ┃ ┣ 📜token_management.py
+ ┃ ┗ 📜user_management.py
+ ┣ 📂other
+ ┣ 📂tests
+ ┃ ┗ 📜test_cases.py
+ ┣ 📜main.py
+ ┗ 📜Resumen.md
 ```
 
 - **config:** Contiene archivos de configuración, como `config.json`, que pueden incluir información de conexión a la base de datos, secretos para la generación de tokens, etc.
