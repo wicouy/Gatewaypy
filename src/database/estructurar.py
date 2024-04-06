@@ -37,6 +37,9 @@ def create_database(db_path):
         cursor.execute('''INSERT INTO Aplicaciones (nombreApp, urlBackend, infoAdicional, habilitado) 
                           VALUES (?, ?, ?, ?)''', (nombre_app, url_backend, info_adicional, habilitado))
 
+    # Crear índice en la tabla Aplicaciones para el nombre de la aplicación
+    cursor.execute('''CREATE INDEX IF NOT EXISTS idx_nombreApp ON Aplicaciones (nombreApp)''')
+
     # Crear la tabla para los Endpoints de las Aplicaciones
     cursor.execute('''CREATE TABLE IF NOT EXISTS AplicacionesEndpoints (
                         idUnicoAppEnd INTEGER PRIMARY KEY,
@@ -68,15 +71,26 @@ def create_database(db_path):
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
                           (id_app, nombre_endpoint, metodo_http, tipo_respuesta, requiere_token, url_backend, puerto_backend, info_adicional, habilitado))
 
-    # Crear la tabla Tokens
-    cursor.execute('''CREATE TABLE IF NOT EXISTS Tokens (
-                        idUnico INTEGER PRIMARY KEY,
-                        idUnicoApp INTEGER,
-                        fechaCreacion TEXT,
-                        fechaExpiracion TEXT,
-                        usuarioSolicitante TEXT,
-                        FOREIGN KEY (idUnicoApp) REFERENCES Aplicaciones (idApp)
-                     )''')
+    # Crear índice en la tabla AplicacionesEndpoints para el nombre del endpoint
+    cursor.execute('''CREATE INDEX IF NOT EXISTS idx_nombreEndpoint ON AplicacionesEndpoints (nombreEndpint)''')
+
+    # Crear la vista para mostrar las aplicaciones y sus endpoints asociados
+    cursor.execute('''CREATE VIEW IF NOT EXISTS AppsWithEndpoints AS
+                      SELECT
+                          A.idApp,
+                          A.nombreApp AS AppName,
+                          AE.idUnicoAppEnd AS EndpointID,
+                          AE.nombreEndpint AS EndpointName,
+                          AE.metodoHttp AS HttpMethod,
+                          AE.tipoRespuesta AS ResponseType,
+                          AE.requiereToken AS RequiresToken,
+                          AE.urlBackend AS BackendURL,
+                          AE.puertoBackend AS BackendPort,
+                          AE.infoAdicional AS EndpointInfo
+                      FROM
+                          Aplicaciones A
+                      LEFT JOIN
+                          AplicacionesEndpoints AE ON A.idApp = AE.idApp;''')
 
     # Guardar los cambios y cerrar la conexión
     conn.commit()
