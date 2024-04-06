@@ -1,16 +1,27 @@
 # main.py
 import os
 import json
-from flask import Flask
+from flask import Flask, request, jsonify
 from blueprints.auth_routes import auth_blueprint
 from blueprints.user_routes import user_blueprint
 from blueprints.app_routes import app_blueprint
 
 app = Flask(__name__)
+
 # Registrar los blueprints
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(user_blueprint)
 app.register_blueprint(app_blueprint)
+
+# Ruta principal para manejar todas las solicitudes entrantes
+@app.route('/', methods=['GET', 'POST'])
+def handle_request():
+    if request.method == 'GET':
+        return jsonify({'message': 'Welcome to the gateway!'})
+    elif request.method == 'POST':
+        # Aquí procesaremos la solicitud entrante
+        # Implementaremos el paso 2: Identificar la aplicación y el recurso solicitado
+        return jsonify({'message': 'Request received!'})
 
 def create_app():
     # Configurar rutas del gateway
@@ -46,4 +57,3 @@ if __name__ == "__main__":
         app.run(host=host, port=port, debug=debug)
     except Exception as e:
         print(f"Error al iniciar la aplicación: {e}")
-
