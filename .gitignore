@@ -153,5 +153,5 @@ dmypy.json
 cython_debug/
 
 
-
-config/
+config.json
+mydb.db
